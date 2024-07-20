@@ -7,3 +7,9 @@
 //
 
 import Foundation
+
+struct Bill {
+    var totalBill: Float
+    var tipPercantage: Int
+    var personCount: Int
+}
