@@ -9,11 +9,28 @@
 import UIKit
 
 class ResultViewController: UIViewController {
+    
+    var billBrain: BillBrain?
 
+    @IBOutlet weak var perPersonPriceLabel: UILabel!
+    @IBOutlet weak var infoLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        perPersonPriceLabel.text = calculatePerPersonPrice()
+        infoLabel.text = "Split between \(billBrain?.bill?.personCount ?? 2) people, with \(billBrain?.bill?.tipPercantage ?? 10)% tip."
+    }
+    
+    @IBAction func recalculate(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func calculatePerPersonPrice() -> String {
+        
+        let perPersonPrice = billBrain?.getPerPersonPrice() ?? 1.0
+        
+        return String(format: "%.2f", perPersonPrice)
     }
     
 

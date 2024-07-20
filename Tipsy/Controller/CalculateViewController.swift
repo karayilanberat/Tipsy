@@ -53,6 +53,7 @@ class CalculateViewController: UIViewController {
         }
         
     }
+    
     @IBAction func stepperPressed(_ sender: UIStepper) {
         stepperCounter.text = "\(Int(sender.value))"
         stepperCount = Int(sender.value)
@@ -61,12 +62,27 @@ class CalculateViewController: UIViewController {
     @IBAction func calculatePressed(_ sender: UIButton) {
         
         if let text = totalBill.text, let totalBillFloat = Float(text) {
-            enterBillTotalLabel.textColor = UIColor.lightGray
             billBrain.createBill(totalBill: totalBillFloat, tipPercantage: selectedTip, splitAmount: stepperCount)
+            self.performSegue(withIdentifier: "goToResults", sender: self)
         } else {
+            // Change text color to red
             enterBillTotalLabel.textColor = UIColor.red
+
+            // Animate back to light gray after 0.5 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                UIView.transition(with: self.enterBillTotalLabel, duration: 0.25, options: .transitionCrossDissolve, animations: {
+                    self.enterBillTotalLabel.textColor = UIColor.lightGray
+                }, completion: nil)
+            }
         }
 
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResults" {
+            let destinationVC = segue.destination as! ResultViewController
+            destinationVC.billBrain = billBrain
+        }
     }
 }
 
